@@ -1,0 +1,141 @@
+﻿@model Glamping_Addventure.Models.Paquete
+
+@{
+    ViewData["Title"] = "Crear Paquete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h4>Paquete</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NombrePaquete" class="control-label"></label>
+                <input asp-for="NombrePaquete" class="form-control" />
+                <span asp-validation-for="NombrePaquete" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="ImagenPaquete" class="control-label"></label>
+                <input type="file" asp-for="ImagenPaquete" class="form-control" accept="image/*" required />
+                <span asp-validation-for="ImagenPaquete" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div><br />
+            
+            @if (ViewData["HabitacionesMensaje"] != null)
+            {
+                <div "form-group" >
+                    @ViewData["HabitacionesMensaje"]
+                    <p class="text-danger">@ViewData["HabitacionesMensaje2"]</p>
+                </div>
+            }else{
+                <div class="form-group">
+                    <label asp-for="Idhabitacion" class="control-label"></label>
+                    <select asp-for="Idhabitacion" class="form-control" asp-items="ViewBag.Idhabitacion"></select>
+                </div>
+            }<br />
+
+            @if (ViewData["ServiciosMensaje"] != null)
+            {
+                <div "form-group" >
+                    @ViewData["ServiciosMensaje"]
+                    <p class="text-danger">@ViewData["ServiciosMensaje2"]</p>
+                </div>
+            }else{
+                <div class="form-group">
+                    <label asp-for="Idservicio" class="control-label"></label>
+                    <select asp-for="Idservicio" class="form-control" asp-items="ViewBag.Idservicio"></select>
+                </div>
+            }<br />
+
+             <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" class="form-control" readonly />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div> <br />
+            @*  <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#calcularPrecioModal">
+                Calcular Precio
+            </button>  *@
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label"></label>
+                <select asp-for="Estado" class="form-control" asp-items="ViewBag.Estados"></select>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary id=" guardarPrecio"" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@* <div class="modal fade" id="calcularPrecioModal" tabindex="-1" aria-labelledby="calcularPrecioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="calcularPrecioModalLabel">Calcular Precio del Paquete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Costo de la Habitación:</strong> <span id="habitacionCosto">0</span></p>
+                <p><strong>Costo del Servicio:</strong> <span id="servicioCosto">0</span></p>
+                <hr />
+                <p><strong>Precio Total:</strong> <span id="precioTotal">0</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarPrecio">Guardar Precio</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            calcularPrecio();
+
+            // Detectar cambios en los select de habitación y servicio
+            $('#Idhabitacion, #Idservicio').change(function () {
+                calcularPrecio();
+            });
+
+            // Función para calcular el precio
+            function calcularPrecio() {
+                const habitacionId = $('#Idhabitacion').val();
+                const servicioId = $('#Idservicio').val();
+
+                // Validar que ambos estén seleccionados
+                if (!habitacionId || !servicioId) {
+                    $('#Precio').val(0); // Reiniciar el precio si no hay selección
+                    return;
+                }
+
+                // Hacer la solicitud AJAX al servidor para obtener los costos
+                $.get('/Paquetes/GetCostos', { habitacionId, servicioId }, function (data) {
+                    if (data) {
+                        const precioTotal = data.habitacionCosto + data.servicioCosto;
+
+                        // Asignar el precio total al campo "Precio"
+                        $('#Precio').val(precioTotal);
+                    }
+                }).fail(function () {
+                    alert('Error al obtener los costos. Por favor, intenta nuevamente.');
+                });
+            }
+        });
+    </script>
+}

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Glamping_Addventure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5f4d958c26bbccc80af4c5fbcc1a8c8b0658ee70")]
 [assembly: System.Reflection.AssemblyProductAttribute("Glamping_Addventure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Glamping_Addventure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

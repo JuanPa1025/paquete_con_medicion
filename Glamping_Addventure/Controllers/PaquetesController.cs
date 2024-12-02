@@ -281,6 +281,16 @@ namespace Glamping_Addventure.Controllers
         }
         // POST: Paquetes/Delete/5
 
+
+
+
+
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         [HttpPost]
         public JsonResult DeleteConfirmed(int id)
         {
@@ -301,6 +311,15 @@ namespace Glamping_Addventure.Controllers
             // Devolver un mensaje de éxito
             return Json(new { success = true, message = "Paquete eliminado con éxito." });
         }
+
+
+
+
+
+
+
+
+
 
         private bool PaqueteExists(int id)
         {
